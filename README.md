@@ -15,6 +15,13 @@ This project is designed for scraping academic paper information from INSPIRE-HE
 - `notebooks/InspireScraper.ipynb`: The main Jupyter notebook for the scraping process.
 - `requirements.txt`: Required Python libraries.
 
+## Features to be added
+- Direct link to articles.
+- Test with different browsers.
+- Time distribution of citations.
+- Fix issues with names, e.g. F. Muia and Francesco Muia should be counted as the same person.
+- Play with NLP models on abstracts and titles.
+
 ## Contributing
 Contributions to the project are welcome. Feel free to fork, make changes, and submit pull requests.
 
