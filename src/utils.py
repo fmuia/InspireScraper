@@ -222,8 +222,14 @@ def scrape_page_data(html_content):
 
     return data
 
-def scrape_all_pages(driver, base_url, total_pages):
+def scrape_all_pages(driver, full_query_url):
     all_data = pd.DataFrame()
+
+    # Prepare the base URL by removing the 'page' parameter
+    base_url = prepare_base_url(full_query_url)
+
+    # Get the total number of pages
+    total_pages = get_total_pages_from_inspire(driver, full_query_url)
 
     for page in range(1, total_pages + 1):
         # Replace or add the 'page' parameter in the URL
