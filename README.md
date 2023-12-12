@@ -19,7 +19,6 @@ This project is designed for scraping academic paper information from INSPIRE-HE
 - Direct link to articles.
 - Test with different browsers.
 - Time distribution of citations.
-- Fix issues with names, e.g. F. Muia and Francesco Muia should be counted as the same person.
 - Play with NLP models on abstracts and titles.
 
 ## Contributing

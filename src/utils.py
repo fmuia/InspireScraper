@@ -107,10 +107,39 @@ def remove_accents(input_str):
     only_ascii = nfkd_form.encode('ASCII', 'ignore')
     return only_ascii.decode('ASCII')
 
+def standardize_author_name(name):
+    """
+    Standardize author name by adding spaces between concatenated initials (if present)
+    and then abbreviating the first name (if not already an initial) and keeping the rest of the name as is.
+
+    Args:
+    name (str): The author's full name.
+
+    Returns:
+    str: Standardized author name.
+    """
+    parts = name.split()
+    if not parts:
+        return ""
+
+    # Add spaces between concatenated initials in the first part of the name
+    if '.' in parts[0] and parts[0][-1] == '.':
+        initials = [char + '.' for char in parts[0] if char != '.']
+        parts[0] = ' '.join(initials)
+
+    # If the first part is already an initial, leave it as is
+    if parts[0].endswith('.'):
+        return ' '.join(parts)
+
+    # Otherwise, transform the first word into an initial and keep the rest as is
+    standardized_name = parts[0][0] + '. ' + ' '.join(parts[1:])
+    return standardized_name
+
 def extract_authors(entry):
     authors_tags = entry.find_all('a', {'data-test-id': 'author-link'})
-    authors_list = [remove_accents(tag.get_text(strip=True)) for tag in authors_tags]
+    authors_list = [standardize_author_name(remove_accents(tag.get_text(strip=True))) for tag in authors_tags]
     return ", ".join(authors_list)
+
 
 # Function to filter out duplicate and invalid entries
 def filter_valid_entries(entries):
@@ -309,3 +338,22 @@ def plot_pareto_authors(df, authors_col='Authors', top_n=20):
     plt.xlabel('Number of Publications')
     plt.ylabel('Author')
     plt.show()
+    
+def calculate_h_index(citation_counts):
+    """
+    Calculate the h-index for a given set of citation counts.
+
+    Args:
+    citation_counts (list or pandas.Series): A list or Series of citation counts for each paper.
+
+    Returns:
+    int: The h-index value.
+    """
+    sorted_counts = sorted(citation_counts, reverse=True)
+    h_index = 0
+    for count in sorted_counts:
+        if count >= h_index + 1:
+            h_index += 1
+        else:
+            break
+    return h_index
